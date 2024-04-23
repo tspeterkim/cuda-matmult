@@ -375,29 +375,30 @@ int main(int argc, char **argv) {
                 exit(EXIT_FAILURE);
             }
 
-            cudaEventRecord(beg);
-            int repeat_times = 50;
-            for (int j = 0; j < repeat_times; j++) {
-                // We don't reset dC between runs to save time
-                run_kernel(kernel_num, m, n, k, alpha, dA, dB, beta, dC, handle);
-            }
-            cudaEventRecord(end);
-            cudaEventSynchronize(beg);
-            cudaEventSynchronize(end);
-            cudaEventElapsedTime(&elapsed_time, beg, end);
-            elapsed_time /= 1000.; // Convert to seconds
+            // For manual GFLOPS measurement. We let Nsight Compute do this.
+            // cudaEventRecord(beg);
+            // int repeat_times = 50;
+            // for (int j = 0; j < repeat_times; j++) {
+            //     // We don't reset dC between runs to save time
+            //     run_kernel(kernel_num, m, n, k, alpha, dA, dB, beta, dC, handle);
+            // }
+            // cudaEventRecord(end);
+            // cudaEventSynchronize(beg);
+            // cudaEventSynchronize(end);
+            // cudaEventElapsedTime(&elapsed_time, beg, end);
+            // elapsed_time /= 1000.; // Convert to seconds
 
-            long flops = 2 * m * n * k;
-            printf(
-                "Average elapsed time: (%7.6f) s, performance: (%7.1f) GFLOPS. size: "
-                "(%ld).\n",
-                elapsed_time / repeat_times,
-                (repeat_times * flops * 1e-9) / elapsed_time, m);
-            fflush(stdout);
-            // make dC and dC_ref equal again (we modified dC while calling our kernel
-            // for benchmarking)
-            cudaCheck(cudaMemcpy(dC, dC_ref, sizeof(float) * m * n, 
-                                    cudaMemcpyDeviceToDevice));
+            // long flops = 2 * m * n * k;
+            // printf(
+            //     "Average elapsed time: (%7.6f) s, performance: (%7.1f) GFLOPS. size: "
+            //     "(%ld).\n",
+            //     elapsed_time / repeat_times,
+            //     (repeat_times * flops * 1e-9) / elapsed_time, m);
+            // fflush(stdout);
+            // // make dC and dC_ref equal again (we modified dC while calling our kernel
+            // // for benchmarking)
+            // cudaCheck(cudaMemcpy(dC, dC_ref, sizeof(float) * m * n, 
+            //                         cudaMemcpyDeviceToDevice));
         }
     }
     return 0;
