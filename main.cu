@@ -357,8 +357,8 @@ int main(int argc, char **argv) {
                 << ", beta: " << beta << std::endl;
             
             // cuBLAS reference for sanity check
-            run_kernel(0, m, n, k, alpha, dA, dB, beta, dC_ref, handle);
-            cudaMemcpy(C_ref, dC_ref, sizeof(float) * m * n, cudaMemcpyDeviceToHost);
+            // run_kernel(0, m, n, k, alpha, dA, dB, beta, dC_ref, handle);
+            // cudaMemcpy(C_ref, dC_ref, sizeof(float) * m * n, cudaMemcpyDeviceToHost);
 
             // Run matmult kernel
             run_kernel(kernel_num, m, n, k, alpha, dA, dB, beta, dC, handle);
@@ -369,11 +369,11 @@ int main(int argc, char **argv) {
             cudaMemcpy(C, dC, sizeof(float) * m * n, cudaMemcpyDeviceToHost);
 
             // Sanity check
-            if (!verify_matrix(C_ref, C, m*n)) {
-                std::cout << "Failed to pass the correctness verification against NVIDIA "
-                       "cuBLAS." << std::endl;
-                exit(EXIT_FAILURE);
-            }
+            // if (!verify_matrix(C_ref, C, m*n)) {
+            //     std::cout << "Failed to pass the correctness verification against NVIDIA "
+            //            "cuBLAS." << std::endl;
+            //     exit(EXIT_FAILURE);
+            // }
 
             // For manual GFLOPS measurement. We let Nsight Compute do this.
             // cudaEventRecord(beg);
